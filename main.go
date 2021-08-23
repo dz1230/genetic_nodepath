@@ -61,20 +61,6 @@ func sameDNA(dna1, dna2 []point) bool {
 	return true
 }
 
-func doubles(route []point) []point {
-	d := make([]point, 0, len(route))
-	for i := 0; i < len(route); i++ {
-		if !hasPoint(d, route[i]) {
-			for j := i + 1; j < len(route); j++ {
-				if route[j] == route[i] {
-					d = append(d, route[i])
-				}
-			}
-		}
-	}
-	return d
-}
-
 func randomRoute(n int, coordSystemSize float32) []point {
 	r := make([]point, n)
 	for i := 0; i < n; i++ {
