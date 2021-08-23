@@ -16,16 +16,10 @@ type point struct {
 
 func distance(route []point) float32 {
 	var d float32
-	for i := 1; i < len(route); i++ {
+	l := len(route)
+	for i := 1; i < l+1; i++ {
 		prev := route[i-1]
-		cur := route[i]
-		xdist := cur.x - prev.x
-		ydist := cur.y - prev.y
-		d += float32(math.Sqrt(float64(xdist*xdist + ydist*ydist)))
-	}
-	if len(route) > 1 {
-		prev := route[len(route)-1]
-		cur := route[0]
+		cur := route[i%l]
 		xdist := cur.x - prev.x
 		ydist := cur.y - prev.y
 		d += float32(math.Sqrt(float64(xdist*xdist + ydist*ydist)))
@@ -33,6 +27,7 @@ func distance(route []point) float32 {
 	return d
 }
 
+//randomPoint with coordinates between 0 and max.
 func randomPoint(max float32) point {
 	return point{
 		x: (rand.Float32() - 0.5) * max,
