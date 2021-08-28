@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 	"os"
 	"strconv"
@@ -10,73 +9,23 @@ import (
 	"time"
 )
 
-type point struct {
-	x, y float32
-}
-
-func distance(route []point) float32 {
-	var d float32
-	l := len(route)
-	for i := 1; i < l+1; i++ {
-		prev := route[i-1]
-		cur := route[i%l]
-		xdist := cur.x - prev.x
-		ydist := cur.y - prev.y
-		d += float32(math.Sqrt(float64(xdist*xdist + ydist*ydist)))
-	}
-	return d
-}
-
-//randomPoint with coordinates between 0 and max.
-func randomPoint(max float32) point {
-	return point{
-		x: (rand.Float32() - 0.5) * max,
-		y: (rand.Float32() - 0.5) * max,
-	}
-}
-
-func hasPoint(route []point, p point) bool {
-	for i := 0; i < len(route); i++ {
-		if p == route[i] {
-			return true
-		}
-	}
-	return false
-}
-
-func sameDNA(dna1, dna2 []point) bool {
-	if len(dna1) != len(dna2) {
-		return false
-	}
-	for i := 0; i < len(dna1); i++ {
-		if dna1[i] != dna2[i] {
-			return false
-		}
-	}
-	return true
-}
-
-func randomRoute(n int, coordSystemSize float32) []point {
-	r := make([]point, n)
-	for i := 0; i < n; i++ {
-		r[i] = randomPoint(coordSystemSize)
-	}
-	return r
-}
-
-func solve(points []point, generations int, populationSize int, mutationProbability, crossoverProbability float32) *individual {
-	p := makePopulation(populationSize, crossoverProbability, mutationProbability, points)
-	var fittest *individual
+func solve(nodes []point, generations int, populationSize int, mutationProbability, crossoverProbability float32) (shortestRoute []point) {
+	p := makePopulation(populationSize, crossoverProbability, mutationProbability, nodes)
+	var fittest []int
 	var maxFitness float32
 	for g := 0; g < generations; g++ {
-		fitness := 1 / distance(p.fittest.dna)
-		if fitness > maxFitness {
+		fitness := 1 / distance(p.nodes, p.fittest)
+		if g == 0 || fitness > maxFitness {
 			fittest = p.fittest
 			maxFitness = fitness
 		}
 		nextGen(p)
 	}
-	return fittest
+	shortestRoute = make([]point, len(nodes))
+	for i := 0; i < len(fittest); i++ {
+		shortestRoute[i] = nodes[fittest[i]]
+	}
+	return
 }
 
 func main() {
@@ -141,5 +90,9 @@ func main() {
 	fmt.Printf("Population size: %d, generations: %d, crossover probability: %f, mutation probability: %f, nodes: %v\n", populationSize, generations, pC, pM, nodes)
 	fmt.Println("Solving...")
 	alltimeFittest := solve(nodes, generations, populationSize, pM, pC)
-	fmt.Printf("Fittest: {distance: %f, fitness: %f, route: %v}\n", distance(alltimeFittest.dna), 1/distance(alltimeFittest.dna), alltimeFittest.dna)
+	forwardPath := make([]int, len(alltimeFittest))
+	for i := 0; i < len(alltimeFittest); i++ {
+		forwardPath[i] = i
+	}
+	fmt.Printf("Fittest: {distance: %f, fitness: %f, route: %v}\n", distance(alltimeFittest, forwardPath), 1/distance(alltimeFittest, forwardPath), alltimeFittest)
 }
