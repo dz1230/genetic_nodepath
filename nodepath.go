@@ -1,7 +1,5 @@
 package main
 
-//TODO finish refactoring
-
 import (
 	"errors"
 	"math"
