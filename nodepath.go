@@ -18,7 +18,6 @@ type population struct {
 	dnaLength            int
 	crossoverProbability float32
 	mutationProbability  float32
-	generation           int
 }
 
 func makePopulation(size int, crossoverProbability, mutationProbability float32, seed []point) *population {
@@ -39,7 +38,6 @@ func makePopulation(size int, crossoverProbability, mutationProbability float32,
 		dnaLength:            len(seed),
 		crossoverProbability: crossoverProbability,
 		mutationProbability:  mutationProbability,
-		generation:           0,
 	}
 	updateFitness(p)
 	return p
@@ -53,7 +51,6 @@ func nextGen(p *population) {
 	}
 	p.current = evolved
 	updateFitness(p)
-	p.generation++
 }
 
 //updateFitness fills p.currentFitnesses with current values and updates p.fittest
