@@ -136,6 +136,7 @@ func crossover(mom, dad []int) (child1, child2 []int) {
 		p = mom[i%l]
 		if !hasPoint(child2[segmentStart:segmentEnd], p) {
 			child2[j2%l] = p
+			j2++
 		}
 	}
 	return
