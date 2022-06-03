@@ -187,8 +187,8 @@ func hasPoint(path []int, p int) bool {
 //randomPoint with coordinates between 0 and max.
 func randomPoint(max float32) point {
 	return point{
-		x: (rand.Float32() - 0.5) * max,
-		y: (rand.Float32() - 0.5) * max,
+		x: (rand.Float32() - 0.5) * 2 * max,
+		y: (rand.Float32() - 0.5) * 2 * max,
 	}
 }
 
